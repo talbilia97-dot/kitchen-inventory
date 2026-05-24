@@ -7,20 +7,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f7f5f0;
-    --surface: #ffffff;
-    --border: #e8e4dc;
-    --text: #1a1a1a;
-    --text-muted: #888;
-    --green: #2d6a4f;
-    --green-light: #d8f3dc;
-    --amber: #b5451b;
-    --amber-light: #fde8dc;
-    --red: #9b2226;
-    --red-light: #fde8e8;
-    --accent: #2d6a4f;
-    --blue: #1a5f9e;
-    --blue-light: #dceefb;
+    --bg: #f7f5f0; --surface: #ffffff; --border: #e8e4dc; --text: #1a1a1a; --text-muted: #888;
+    --green: #2d6a4f; --green-light: #d8f3dc; --amber: #b5451b; --amber-light: #fde8dc;
+    --red: #9b2226; --red-light: #fde8e8; --accent: #2d6a4f; --blue: #1a5f9e; --blue-light: #dceefb;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
@@ -30,14 +19,10 @@
   .header-btns { display: flex; gap: 8px; }
   .btn { border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 500; }
   .btn-primary { background: var(--accent); color: white; }
-  .btn-primary:hover { opacity: 0.9; }
   .btn-telegram { background: #229ED9; color: white; }
-  .btn-telegram:hover { opacity: 0.9; }
-  .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
-  .btn-secondary:hover { background: var(--bg); }
   .container { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
   .tabs { display: flex; gap: 4px; margin-bottom: 1.5rem; background: var(--border); border-radius: 10px; padding: 4px; }
-  .tab { flex: 1; text-align: center; padding: 8px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-muted); transition: all 0.15s; }
+  .tab { flex: 1; text-align: center; padding: 8px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-muted); }
   .tab.active { background: var(--surface); color: var(--text); }
   .panel { display: none; }
   .panel.active { display: block; }
@@ -47,7 +32,6 @@
   .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
   .stat-num.warn { color: var(--amber); }
   .stat-num.danger { color: var(--red); }
-  .stat-num.info { color: var(--blue); }
   .alerts { border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
   .alerts.exp { background: var(--red-light); border: 1px solid #f0a0a0; }
   .alerts.warn { background: var(--amber-light); border: 1px solid #f0b89a; }
@@ -84,22 +68,25 @@
   .add-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
   .add-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
   .form-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
-  .form-grid2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .form-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .form-col { display: flex; flex-direction: column; gap: 10px; }
   input { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 13px; background: var(--bg); color: var(--text); width: 100%; }
   input:focus { outline: none; border-color: var(--accent); background: white; }
+  .field-label { font-size: 12px; font-weight: 500; margin-bottom: 4px; }
   .add-btn { background: var(--accent); color: white; border: none; padding: 9px 20px; border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; width: 100%; }
   .add-btn:hover { opacity: 0.9; }
   .shop-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
-  .shop-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
-  .shop-item.done { opacity: 0.5; text-decoration: line-through; }
-  .shop-check { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--border); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .shop-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; transition: opacity 0.2s; }
+  .shop-item.done { opacity: 0.4; }
+  .shop-check { width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--border); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.15s; }
   .shop-check.checked { background: var(--accent); border-color: var(--accent); color: white; }
   .shop-name { flex: 1; font-size: 14px; }
+  .shop-name.done { text-decoration: line-through; }
   .shop-qty { font-size: 13px; color: var(--text-muted); }
-  .send-shop-btn { width: 100%; margin-bottom: 1rem; }
+  .send-shop-btn { width: 100%; margin-bottom: 1rem; justify-content: center; }
   .empty { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 14px; }
   .status-bar { text-align: center; font-size: 12px; color: var(--text-muted); padding: 1rem; }
-  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: white; padding: 10px 20px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: white; padding: 10px 20px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
   .toast.show { opacity: 1; }
 </style>
 </head>
@@ -116,17 +103,17 @@
 <div class="container">
   <div class="tabs">
     <div class="tab active" onclick="switchTab('inventory')">מלאי</div>
-    <div class="tab" onclick="switchTab('shopping')">רשימת קניות</div>
+    <div class="tab" onclick="switchTab('shopping')">🛒 קניות</div>
     <div class="tab" onclick="switchTab('settings')">⚙️ הגדרות</div>
   </div>
 
+  <!-- מלאי -->
   <div id="panel-inventory" class="panel active">
     <div class="stats">
       <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">מוצרים</div></div>
       <div class="stat"><div class="stat-num warn" id="s-warn">—</div><div class="stat-label">עומדים לפוג</div></div>
       <div class="stat"><div class="stat-num danger" id="s-exp">—</div><div class="stat-label">פג תוקף</div></div>
     </div>
-
     <div class="alerts exp" id="alert-exp" style="display:none">
       <div class="alerts-title">🚨 פג תוקף</div>
       <div id="list-exp"></div>
@@ -135,18 +122,16 @@
       <div class="alerts-title">⚠️ עומד לפוג בקרוב</div>
       <div id="list-warn"></div>
     </div>
-
     <div class="section-title">כל המוצרים</div>
     <input class="search" type="text" placeholder="חיפוש..." oninput="renderItems()" id="search" />
     <div class="items" id="items-list"></div>
-
     <div class="add-section">
       <div class="add-title">הוספת מוצר</div>
       <div class="form-grid">
         <input id="f-name" type="text" placeholder="שם מוצר" />
         <input id="f-qty" type="number" placeholder="כמות" value="1" min="0" />
         <input id="f-unit" type="text" placeholder="יחידה" />
-        <input id="f-minqty" type="number" placeholder="מינימום" value="1" min="0" />
+        <input id="f-minqty" type="number" placeholder="מינימום" value="0" min="0" />
       </div>
       <div class="form-grid2">
         <input id="f-expiry" type="date" />
@@ -155,6 +140,7 @@
     </div>
   </div>
 
+  <!-- קניות -->
   <div id="panel-shopping" class="panel">
     <div class="alerts shop" id="alert-shop" style="display:none">
       <div class="alerts-title">🛒 צריך לקנות</div>
@@ -165,31 +151,34 @@
     <div class="shop-list" id="shop-list"></div>
   </div>
 
+  <!-- הגדרות -->
   <div id="panel-settings" class="panel">
     <div class="add-section">
       <div class="add-title">⚙️ הגדרות אישיות</div>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">הכניסי את הפרטים שלך — הם נשמרים רק במכשיר שלך</p>
-      <div style="display:flex;flex-direction:column;gap:10px">
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px">הכניסי את הפרטים שלך — נשמרים רק במכשיר שלך</p>
+      <div class="form-col">
         <div>
-          <div style="font-size:12px;font-weight:500;margin-bottom:4px">מזהה Google Sheet (Spreadsheet ID)</div>
+          <div class="field-label">מזהה Google Sheet (Spreadsheet ID)</div>
           <input id="s-sheet-id" type="text" placeholder="1N5Ez..." />
         </div>
         <div>
-          <div style="font-size:12px;font-weight:500;margin-bottom:4px">Google API Key</div>
+          <div class="field-label">Google API Key</div>
           <input id="s-api-key" type="text" placeholder="AIzaSy..." />
         </div>
         <div>
-          <div style="font-size:12px;font-weight:500;margin-bottom:4px">Telegram Bot Token</div>
+          <div class="field-label">Telegram Bot Token</div>
           <input id="s-bot-token" type="text" placeholder="123456:ABC..." />
         </div>
         <div>
-          <div style="font-size:12px;font-weight:500;margin-bottom:4px">Telegram Chat ID</div>
+          <div class="field-label">Telegram Chat ID</div>
           <input id="s-chat-id" type="text" placeholder="1558300817" />
         </div>
         <button class="add-btn" onclick="saveSettings()">💾 שמור הגדרות</button>
       </div>
     </div>
   </div>
+
+  <div class="status-bar" id="status">לחצי "סנכרן" לטעינת הנתונים מ-Google Sheets</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -201,15 +190,15 @@ const SHEET_NAME = 'מלאי  (Inventory)';
 let BOT_TOKEN = localStorage.getItem('bot_token') || '8893612977:AAFv86-nDhoSTdqwdwnMyVW4TKNoHChvWQc';
 let CHAT_ID = localStorage.getItem('chat_id') || '1558300817';
 
-const EMOJIS = {'חלב':'🥛','יוגורט':'🫙','לחם':'🍞','ביצים':'🥚','גבינה':'🧀','בשר':'🥩','עוף':'🍗','דג':'🐟','ירק':'🥦','פרי':'🍎','גזר':'🥕','עגבניה':'🍅','מלפפון':'🥒','תפוח':'🍎','בצל':'🧅','שום':'🧄','חמאה':'🧈','שמן':'🫙','קפה':'☕','תה':'🍵','אורז':'🍚','פסטה':'🍝'};
-const DEF_EMOJIS = ['🥫','🧂','📦','🥡'];
+const EMOJIS = {'חלב':'🥛','יוגורט':'🫙','לחם':'🍞','ביצים':'🥚','גבינה':'🧀','בשר':'🥩','עוף':'🍗','דג':'🐟','גזר':'🥕','עגבניה':'🍅','מלפפון':'🥒','תפוח':'🍎','בצל':'🧅','שום':'🧄','חמאה':'🧈','קפה':'☕','תה':'🍵','אורז':'🍚','פסטה':'🍝','שמנת':'🥛','טונה':'🐟'};
+const DEF = ['🥫','🧂','📦','🥡'];
 
 let items = [];
 let shopChecked = {};
 
-function getEmoji(name) {
-  for (const [k,v] of Object.entries(EMOJIS)) if (name.includes(k)) return v;
-  return DEF_EMOJIS[Math.abs((name.charCodeAt(0)||0)) % DEF_EMOJIS.length];
+function getEmoji(n) {
+  for (const [k,v] of Object.entries(EMOJIS)) if (n.includes(k)) return v;
+  return DEF[Math.abs((n.charCodeAt(0)||0)) % DEF.length];
 }
 
 function getStatus(expiry) {
@@ -230,18 +219,20 @@ function daysUntil(expiry) {
 function formatDate(d) {
   if (!d) return '';
   const p = d.split('-');
-  return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
+  return p.length === 3 ? p[2]+'/'+p[1]+'/'+p[0] : d;
 }
 
 function parseExpiry(val) {
   if (!val || val === '—' || val === '-') return '';
   const p = val.split('/');
-  if (p.length === 3) return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+  if (p.length === 3) return p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0');
   return val;
 }
 
 function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='inventory')||(i===1&&tab==='shopping')||(i===2&&tab==='settings')));
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active', (i===0&&tab==='inventory')||(i===1&&tab==='shopping')||(i===2&&tab==='settings'));
+  });
   document.getElementById('panel-inventory').classList.toggle('active', tab==='inventory');
   document.getElementById('panel-shopping').classList.toggle('active', tab==='shopping');
   document.getElementById('panel-settings').classList.toggle('active', tab==='settings');
@@ -252,7 +243,7 @@ function switchTab(tab) {
 async function loadFromSheets() {
   setStatus('מתחבר ל-Google Sheets...');
   try {
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_NAME)}!A2:F100?key=${API_KEY}`;
+    const url = 'https://sheets.googleapis.com/v4/spreadsheets/'+SHEET_ID+'/values/'+encodeURIComponent(SHEET_NAME)+'!A2:F100?key='+API_KEY;
     const res = await fetch(url);
     if (!res.ok) throw new Error('שגיאה ' + res.status);
     const data = await res.json();
@@ -267,11 +258,11 @@ async function loadFromSheets() {
       emoji: getEmoji(r[0]||'')
     }));
     renderAll();
-    setStatus(`סונכרן — ${items.length} מוצרים`);
+    setStatus('סונכרן — '+items.length+' מוצרים');
     showToast('✓ הנתונים עודכנו בהצלחה');
   } catch(e) {
     setStatus('שגיאה: ' + e.message);
-    showToast('שגיאה בסנכרון: ' + e.message);
+    showToast('שגיאה: ' + e.message);
   }
 }
 
@@ -286,44 +277,44 @@ function renderItems() {
     const isLow = item.minQty > 0 && item.qty < item.minQty;
     const badgeClass = st==='expired'?'badge-exp':st==='warning'?'badge-warn':isLow?'badge-low':'badge-ok';
     const badgeText = st==='expired'?'פג תוקף':st==='warning'?'עומד לפוג':isLow?'מלאי נמוך':'תקין';
-    const cls = 'item' + (st==='expired'?' expired':st==='warning'?' warning':isLow?' low':'');
+    const cls = 'item'+(st==='expired'?' expired':st==='warning'?' warning':isLow?' low':'');
     const meta = [];
     if (item.unit) meta.push(item.unit);
     if (item.expiry) {
-      const ds = days<0?` (לפני ${Math.abs(days)} ימים)`:days===0?' (היום!)':`(${days} ימים)`;
-      meta.push(`תפוגה: ${formatDate(item.expiry)} ${ds}`);
+      const ds = days<0?' (לפני '+Math.abs(days)+' ימים)':days===0?' (היום!)':'('+days+' ימים)';
+      meta.push('תפוגה: '+formatDate(item.expiry)+' '+ds);
     }
-    if (item.minQty>0) meta.push(`מינימום: ${item.minQty}`);
-    return `<div class="${cls}">
-      <div class="item-emoji">${item.emoji}</div>
-      <div class="item-info">
-        <div class="item-name">${item.name}</div>
-        <div class="item-meta">${meta.join(' · ')}</div>
-      </div>
-      <span class="item-badge ${badgeClass}">${badgeText}</span>
-      <div class="qty-controls">
-        <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
-        <span class="qty-num">${item.qty}</span>
-        <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
-      </div>
-    </div>`;
+    if (item.minQty>0) meta.push('מינימום: '+item.minQty);
+    return '<div class="'+cls+'">'+
+      '<div class="item-emoji">'+item.emoji+'</div>'+
+      '<div class="item-info">'+
+        '<div class="item-name">'+item.name+'</div>'+
+        '<div class="item-meta">'+meta.join(' · ')+'</div>'+
+      '</div>'+
+      '<span class="item-badge '+badgeClass+'">'+badgeText+'</span>'+
+      '<div class="qty-controls">'+
+        '<button class="qty-btn" onclick="changeQty('+item.id+',-1)">−</button>'+
+        '<span class="qty-num">'+item.qty+'</span>'+
+        '<button class="qty-btn" onclick="changeQty('+item.id+',1)">+</button>'+
+      '</div>'+
+    '</div>';
   }).join('');
 }
 
 function renderAlerts() {
   const expired = items.filter(i => getStatus(i.expiry)==='expired');
   const warning = items.filter(i => getStatus(i.expiry)==='warning');
-  const box1 = document.getElementById('alert-exp');
-  const box2 = document.getElementById('alert-warn');
-  box1.style.display = expired.length ? 'block' : 'none';
-  box2.style.display = warning.length ? 'block' : 'none';
+  const b1 = document.getElementById('alert-exp');
+  const b2 = document.getElementById('alert-warn');
+  b1.style.display = expired.length ? 'block' : 'none';
+  b2.style.display = warning.length ? 'block' : 'none';
   document.getElementById('list-exp').innerHTML = expired.map(i => {
     const d = daysUntil(i.expiry);
-    return `<div class="alert-item">• ${i.name} — פג לפני ${Math.abs(d)} ימים</div>`;
+    return '<div class="alert-item">• '+i.name+' — פג לפני '+Math.abs(d)+' ימים</div>';
   }).join('');
   document.getElementById('list-warn').innerHTML = warning.map(i => {
     const d = daysUntil(i.expiry);
-    return `<div class="alert-item">• ${i.name} — ${d===0?'היום!':'בעוד '+d+' ימים'}</div>`;
+    return '<div class="alert-item">• '+i.name+' — '+(d===0?'היום!':'בעוד '+d+' ימים')+'</div>';
   }).join('');
 }
 
@@ -332,27 +323,26 @@ function renderShopping() {
   const shopBox = document.getElementById('alert-shop');
   shopBox.style.display = lowItems.length ? 'block' : 'none';
   document.getElementById('list-shop').innerHTML = lowItems.map(i =>
-    `<div class="alert-item">• ${i.name} — יש ${i.qty}, צריך ${i.minQty}</div>`
+    '<div class="alert-item">• '+i.name+' — יש '+i.qty+', צריך '+i.minQty+'</div>'
   ).join('');
 
-  const list = document.getElementById('shop-list');
   const expired = items.filter(i => getStatus(i.expiry)==='expired');
   const all = [...lowItems, ...expired.filter(i => !lowItems.find(l=>l.id===i.id))];
+  const list = document.getElementById('shop-list');
 
   if (!all.length) {
     list.innerHTML = '<div class="empty">המלאי מלא! אין מה לקנות 🎉</div>';
     return;
   }
+
   list.innerHTML = all.map(item => {
     const need = item.minQty > 0 ? item.minQty - item.qty : 1;
     const checked = shopChecked[item.id];
-    return `<div class="shop-item ${checked?'done':''}">
-      <div class="shop-check ${checked?'checked':''}" onclick="toggleCheck(${item.id})">
-        ${checked?'✓':''}
-      </div>
-      <div class="shop-name">${item.emoji} ${item.name}</div>
-      <div class="shop-qty">${need > 0 ? need+' '+item.unit : item.unit}</div>
-    </div>`;
+    return '<div class="shop-item '+(checked?'done':'')+'">'+
+      '<div class="shop-check '+(checked?'checked':'')+'" onclick="toggleCheck('+item.id+')">'+(checked?'✓':'')+'</div>'+
+      '<div class="shop-name '+(checked?'done':'')+'">'+item.emoji+' '+item.name+'</div>'+
+      '<div class="shop-qty">'+(need>0?need+' '+item.unit:item.unit)+'</div>'+
+    '</div>';
   }).join('');
 }
 
@@ -375,9 +365,12 @@ async function toggleCheck(id) {
   if (shopChecked[id]) {
     const item = items.find(i=>i.id===id);
     if (item) {
-      const need = item.minQty > item.qty ? item.minQty - item.qty : 1;
-      await sendTelegram(`הוסף ${item.name}`);
-      showToast(`✓ ${item.name} נשלח לעדכון מלאי`);
+      try {
+        await sendTelegram('הוסף '+item.name);
+        showToast('✓ '+item.name+' נשלח לעדכון מלאי');
+      } catch(e) {
+        showToast('שגיאה בשליחה לטלגרם');
+      }
     }
   }
 }
@@ -386,8 +379,7 @@ function addItem() {
   const name = document.getElementById('f-name').value.trim();
   if (!name) return;
   items.push({
-    id: Date.now(),
-    name,
+    id: Date.now(), name,
     qty: parseFloat(document.getElementById('f-qty').value)||1,
     unit: document.getElementById('f-unit').value.trim()||'יחידה',
     expiry: document.getElementById('f-expiry').value,
@@ -396,75 +388,57 @@ function addItem() {
   });
   ['f-name','f-unit','f-expiry'].forEach(id=>document.getElementById(id).value='');
   document.getElementById('f-qty').value='1';
-  document.getElementById('f-minqty').value='1';
+  document.getElementById('f-minqty').value='0';
   renderAll();
-  showToast(`✓ ${name} נוסף`);
+  showToast('✓ '+name+' נוסף');
 }
 
 async function sendTelegram(msg) {
-  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-  await fetch(url, {
+  const url = 'https://api.telegram.org/bot'+BOT_TOKEN+'/sendMessage';
+  const res = await fetch(url, {
     method: 'POST',
     headers: {'Content-Type':'application/json'},
     body: JSON.stringify({chat_id: CHAT_ID, text: msg, parse_mode: 'HTML'})
   });
+  if (!res.ok) throw new Error('שגיאה בשליחה');
 }
 
 async function sendTelegramAlert() {
   const expired = items.filter(i=>getStatus(i.expiry)==='expired');
   const warning = items.filter(i=>getStatus(i.expiry)==='warning');
   const low = items.filter(i=>i.minQty>0&&i.qty<i.minQty);
-
-  if (!expired.length && !warning.length && !low.length) {
-    showToast('הכל תקין! אין התראות לשלוח');
-    return;
-  }
-
+  if (!expired.length && !warning.length && !low.length) { showToast('הכל תקין! אין התראות'); return; }
   let msg = '🏠 <b>עדכון מלאי מטבח</b>\n\n';
   if (expired.length) {
     msg += '🚨 <b>פג תוקף:</b>\n';
-    expired.forEach(i => { const d=daysUntil(i.expiry); msg+=`• ${i.name} (לפני ${Math.abs(d)} ימים)\n`; });
+    expired.forEach(i => { const d=daysUntil(i.expiry); msg+='• '+i.name+' (לפני '+Math.abs(d)+' ימים)\n'; });
     msg += '\n';
   }
   if (warning.length) {
     msg += '⚠️ <b>עומד לפוג:</b>\n';
-    warning.forEach(i => { const d=daysUntil(i.expiry); msg+=`• ${i.name} (${d===0?'היום!':'בעוד '+d+' ימים'})\n`; });
+    warning.forEach(i => { const d=daysUntil(i.expiry); msg+='• '+i.name+' ('+(d===0?'היום!':'בעוד '+d+' ימים')+')\n'; });
     msg += '\n';
   }
   if (low.length) {
     msg += '🛒 <b>מלאי נמוך:</b>\n';
-    low.forEach(i => { const need = i.minQty - i.qty; msg+=`• ${i.name} — קני ${need} ${i.unit}\n`; });
+    low.forEach(i => { const need=i.minQty-i.qty; msg+='• '+i.name+' — קני '+need+' '+i.unit+'\n'; });
   }
-
-  try {
-    await sendTelegram(msg);
-    showToast('✓ התראה נשלחה לטלגרם');
-  } catch(e) {
-    showToast('שגיאה בשליחה לטלגרם');
-  }
+  try { await sendTelegram(msg); showToast('✓ התראה נשלחה לטלגרם'); }
+  catch(e) { showToast('שגיאה בשליחה'); }
 }
 
 async function sendShoppingList() {
   const low = items.filter(i=>i.minQty>0&&i.qty<i.minQty&&!shopChecked[i.id]);
   const expired = items.filter(i=>getStatus(i.expiry)==='expired'&&!shopChecked[i.id]);
   const all = [...low, ...expired.filter(i=>!low.find(l=>l.id===i.id))];
-
   if (!all.length) { showToast('אין פריטים לשלוח'); return; }
-
   let msg = '🛒 <b>רשימת קניות</b>\n\n';
   all.forEach(i => {
     const need = i.minQty>0 ? i.minQty-i.qty : 1;
-    msg += `• ${i.emoji} ${i.name}`;
-    if (need>0) msg += ` — ${need} ${i.unit}`;
-    msg += '\n';
+    msg += '• '+i.emoji+' '+i.name+(need>0?' — '+need+' '+i.unit:'')+'\n';
   });
-
-  try {
-    await sendTelegram(msg);
-    showToast('✓ רשימת קניות נשלחה לטלגרם');
-  } catch(e) {
-    showToast('שגיאה בשליחה');
-  }
+  try { await sendTelegram(msg); showToast('✓ רשימת קניות נשלחה'); }
+  catch(e) { showToast('שגיאה בשליחה'); }
 }
 
 function loadSettingsForm() {
@@ -475,26 +449,29 @@ function loadSettingsForm() {
 }
 
 function saveSettings() {
-  const sheetId = document.getElementById('s-sheet-id').value.trim();
-  const apiKey = document.getElementById('s-api-key').value.trim();
-  const botToken = document.getElementById('s-bot-token').value.trim();
-  const chatId = document.getElementById('s-chat-id').value.trim();
-  if (sheetId) { localStorage.setItem('sheet_id', sheetId); SHEET_ID = sheetId; }
-  if (apiKey) { localStorage.setItem('api_key', apiKey); API_KEY = apiKey; }
-  if (botToken) { localStorage.setItem('bot_token', botToken); BOT_TOKEN = botToken; }
-  if (chatId) { localStorage.setItem('chat_id', chatId); CHAT_ID = chatId; }
+  const fields = [['sheet_id','s-sheet-id'],['api_key','s-api-key'],['bot_token','s-bot-token'],['chat_id','s-chat-id']];
+  fields.forEach(([key, elId]) => {
+    const val = document.getElementById(elId).value.trim();
+    if (val) localStorage.setItem(key, val);
+  });
+  SHEET_ID = localStorage.getItem('sheet_id') || SHEET_ID;
+  API_KEY = localStorage.getItem('api_key') || API_KEY;
+  BOT_TOKEN = localStorage.getItem('bot_token') || BOT_TOKEN;
+  CHAT_ID = localStorage.getItem('chat_id') || CHAT_ID;
   showToast('✓ ההגדרות נשמרו!');
   switchTab('inventory');
 }
 
+function setStatus(msg) {
+  const el = document.getElementById('status');
+  if (el) el.textContent = msg;
+}
 
-
-function setStatus(msg) { document.getElementById('status').textContent = msg; }
-
+function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'), 3000);
+  setTimeout(() => t.classList.remove('show'), 3000);
 }
 
 renderAll();
