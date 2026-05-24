@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מלאי מטבח</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f5f0;
+    --surface: #ffffff;
+    --border: #e8e4dc;
+    --text: #1a1a1a;
+    --text-muted: #888;
+    --green: #2d6a4f;
+    --green-light: #d8f3dc;
+    --amber: #b5451b;
+    --amber-light: #fde8dc;
+    --red: #9b2226;
+    --red-light: #fde8e8;
+    --accent: #2d6a4f;
+    --blue: #1a5f9e;
+    --blue-light: #dceefb;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Heebo', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 1rem 1.5rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+  .logo { font-size: 18px; font-weight: 700; color: var(--accent); }
+  .logo span { font-weight: 300; color: var(--text-muted); }
+  .header-btns { display: flex; gap: 8px; }
+  .btn { border: none; padding: 8px 14px; border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px; font-weight: 500; }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { opacity: 0.9; }
+  .btn-telegram { background: #229ED9; color: white; }
+  .btn-telegram:hover { opacity: 0.9; }
+  .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+  .btn-secondary:hover { background: var(--bg); }
+  .container { max-width: 800px; margin: 0 auto; padding: 1.5rem; }
+  .tabs { display: flex; gap: 4px; margin-bottom: 1.5rem; background: var(--border); border-radius: 10px; padding: 4px; }
+  .tab { flex: 1; text-align: center; padding: 8px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--text-muted); transition: all 0.15s; }
+  .tab.active { background: var(--surface); color: var(--text); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 1.5rem; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem; text-align: center; }
+  .stat-num { font-size: 28px; font-weight: 700; }
+  .stat-label { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .stat-num.warn { color: var(--amber); }
+  .stat-num.danger { color: var(--red); }
+  .stat-num.info { color: var(--blue); }
+  .alerts { border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .alerts.exp { background: var(--red-light); border: 1px solid #f0a0a0; }
+  .alerts.warn { background: var(--amber-light); border: 1px solid #f0b89a; }
+  .alerts.shop { background: var(--blue-light); border: 1px solid #90c4e8; }
+  .alerts-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; }
+  .alerts.exp .alerts-title { color: var(--red); }
+  .alerts.warn .alerts-title { color: var(--amber); }
+  .alerts.shop .alerts-title { color: var(--blue); }
+  .alert-item { font-size: 13px; padding: 3px 0; }
+  .alerts.exp .alert-item { color: #7a1010; }
+  .alerts.warn .alert-item { color: #7a3015; }
+  .alerts.shop .alert-item { color: #0d3d6e; }
+  .section-title { font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
+  .search { width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 14px; background: var(--surface); margin-bottom: 1rem; }
+  .search:focus { outline: none; border-color: var(--accent); }
+  .items { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
+  .item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+  .item.expired { border-right: 3px solid var(--red); }
+  .item.warning { border-right: 3px solid var(--amber); }
+  .item.low { border-right: 3px solid var(--blue); }
+  .item-emoji { font-size: 24px; flex-shrink: 0; }
+  .item-info { flex: 1; min-width: 0; }
+  .item-name { font-size: 15px; font-weight: 500; }
+  .item-meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .item-badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; flex-shrink: 0; }
+  .badge-ok { background: var(--green-light); color: var(--green); }
+  .badge-warn { background: var(--amber-light); color: var(--amber); }
+  .badge-exp { background: var(--red-light); color: var(--red); }
+  .badge-low { background: var(--blue-light); color: var(--blue); }
+  .qty-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .qty-btn:hover { background: var(--border); }
+  .qty-num { font-size: 16px; font-weight: 600; min-width: 28px; text-align: center; }
+  .add-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; }
+  .add-title { font-size: 14px; font-weight: 700; margin-bottom: 12px; }
+  .form-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .form-grid2 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  input { padding: 9px 12px; border: 1px solid var(--border); border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 13px; background: var(--bg); color: var(--text); width: 100%; }
+  input:focus { outline: none; border-color: var(--accent); background: white; }
+  .add-btn { background: var(--accent); color: white; border: none; padding: 9px 20px; border-radius: 8px; font-family: 'Heebo', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer; width: 100%; }
+  .add-btn:hover { opacity: 0.9; }
+  .shop-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; }
+  .shop-item { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 16px; display: flex; align-items: center; gap: 12px; }
+  .shop-item.done { opacity: 0.5; text-decoration: line-through; }
+  .shop-check { width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--border); cursor: pointer; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+  .shop-check.checked { background: var(--accent); border-color: var(--accent); color: white; }
+  .shop-name { flex: 1; font-size: 14px; }
+  .shop-qty { font-size: 13px; color: var(--text-muted); }
+  .send-shop-btn { width: 100%; margin-bottom: 1rem; }
+  .empty { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 14px; }
+  .status-bar { text-align: center; font-size: 12px; color: var(--text-muted); padding: 1rem; }
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: white; padding: 10px 20px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 999; }
+  .toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">מלאי מטבח <span>/ Kitchen</span></div>
+  <div class="header-btns">
+    <button class="btn btn-telegram" onclick="sendTelegramAlert()">📲 שלח התראה</button>
+    <button class="btn btn-primary" onclick="loadFromSheets()">⟳ סנכרן</button>
+  </div>
+</header>
+
+<div class="container">
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('inventory')">מלאי</div>
+    <div class="tab" onclick="switchTab('shopping')">רשימת קניות</div>
+  </div>
+
+  <div id="panel-inventory" class="panel active">
+    <div class="stats">
+      <div class="stat"><div class="stat-num" id="s-total">—</div><div class="stat-label">מוצרים</div></div>
+      <div class="stat"><div class="stat-num warn" id="s-warn">—</div><div class="stat-label">עומדים לפוג</div></div>
+      <div class="stat"><div class="stat-num danger" id="s-exp">—</div><div class="stat-label">פג תוקף</div></div>
+    </div>
+
+    <div class="alerts exp" id="alert-exp" style="display:none">
+      <div class="alerts-title">🚨 פג תוקף</div>
+      <div id="list-exp"></div>
+    </div>
+    <div class="alerts warn" id="alert-warn" style="display:none">
+      <div class="alerts-title">⚠️ עומד לפוג בקרוב</div>
+      <div id="list-warn"></div>
+    </div>
+
+    <div class="section-title">כל המוצרים</div>
+    <input class="search" type="text" placeholder="חיפוש..." oninput="renderItems()" id="search" />
+    <div class="items" id="items-list"></div>
+
+    <div class="add-section">
+      <div class="add-title">הוספת מוצר</div>
+      <div class="form-grid">
+        <input id="f-name" type="text" placeholder="שם מוצר" />
+        <input id="f-qty" type="number" placeholder="כמות" value="1" min="0" />
+        <input id="f-unit" type="text" placeholder="יחידה" />
+        <input id="f-minqty" type="number" placeholder="מינימום" value="1" min="0" />
+      </div>
+      <div class="form-grid2">
+        <input id="f-expiry" type="date" />
+        <button class="add-btn" onclick="addItem()">+ הוסף</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="panel-shopping" class="panel">
+    <div class="alerts shop" id="alert-shop" style="display:none">
+      <div class="alerts-title">🛒 צריך לקנות</div>
+      <div id="list-shop"></div>
+    </div>
+    <div class="section-title">רשימת קניות</div>
+    <button class="btn btn-telegram send-shop-btn" onclick="sendShoppingList()">📲 שלח רשימה לטלגרם</button>
+    <div class="shop-list" id="shop-list"></div>
+  </div>
+
+  <div class="status-bar" id="status">לחצי "סנכרן" לטעינת הנתונים מ-Google Sheets</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SHEET_ID = '1N5EzOBkYNZ8uMzFXHVkMTCooHeesGtlMqKwguixexQo';
+const API_KEY = 'AIzaSyCbTGobtkFdw-5zqsXt00URdt1CdsMGjUY';
+const SHEET_NAME = 'מלאי  (Inventory)';
+const BOT_TOKEN = '8893612977:AAFv86-nDhoSTdqwdwnMyVW4TKNoHChvWQc';
+const CHAT_ID = '1558300817';
+
+const EMOJIS = {'חלב':'🥛','יוגורט':'🫙','לחם':'🍞','ביצים':'🥚','גבינה':'🧀','בשר':'🥩','עוף':'🍗','דג':'🐟','ירק':'🥦','פרי':'🍎','גזר':'🥕','עגבניה':'🍅','מלפפון':'🥒','תפוח':'🍎','בצל':'🧅','שום':'🧄','חמאה':'🧈','שמן':'🫙','קפה':'☕','תה':'🍵','אורז':'🍚','פסטה':'🍝'};
+const DEF_EMOJIS = ['🥫','🧂','📦','🥡'];
+
+let items = [];
+let shopChecked = {};
+
+function getEmoji(name) {
+  for (const [k,v] of Object.entries(EMOJIS)) if (name.includes(k)) return v;
+  return DEF_EMOJIS[Math.abs((name.charCodeAt(0)||0)) % DEF_EMOJIS.length];
+}
+
+function getStatus(expiry) {
+  if (!expiry) return 'ok';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diff = Math.ceil((new Date(expiry) - today) / 86400000);
+  if (diff < 0) return 'expired';
+  if (diff <= 3) return 'warning';
+  return 'ok';
+}
+
+function daysUntil(expiry) {
+  if (!expiry) return null;
+  const today = new Date(); today.setHours(0,0,0,0);
+  return Math.ceil((new Date(expiry) - today) / 86400000);
+}
+
+function formatDate(d) {
+  if (!d) return '';
+  const p = d.split('-');
+  return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
+}
+
+function parseExpiry(val) {
+  if (!val || val === '—' || val === '-') return '';
+  const p = val.split('/');
+  if (p.length === 3) return `${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`;
+  return val;
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='inventory')||(i===1&&tab==='shopping')));
+  document.getElementById('panel-inventory').classList.toggle('active', tab==='inventory');
+  document.getElementById('panel-shopping').classList.toggle('active', tab==='shopping');
+  if (tab==='shopping') renderShopping();
+}
+
+async function loadFromSheets() {
+  setStatus('מתחבר ל-Google Sheets...');
+  try {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${encodeURIComponent(SHEET_NAME)}!A2:F100?key=${API_KEY}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('שגיאה ' + res.status);
+    const data = await res.json();
+    const rows = (data.values || []).filter(r => r[0]);
+    items = rows.map((r,i) => ({
+      id: i+1,
+      name: r[0]||'',
+      qty: parseFloat(r[1])||0,
+      unit: r[2]||'יחידה',
+      expiry: parseExpiry(r[3]),
+      minQty: parseFloat(r[5])||0,
+      emoji: getEmoji(r[0]||'')
+    }));
+    renderAll();
+    setStatus(`סונכרן — ${items.length} מוצרים`);
+    showToast('✓ הנתונים עודכנו בהצלחה');
+  } catch(e) {
+    setStatus('שגיאה: ' + e.message);
+    showToast('שגיאה בסנכרון: ' + e.message);
+  }
+}
+
+function renderItems() {
+  const q = document.getElementById('search').value.trim();
+  const filtered = q ? items.filter(i => i.name.includes(q)) : items;
+  const list = document.getElementById('items-list');
+  if (!filtered.length) { list.innerHTML = '<div class="empty">לא נמצאו מוצרים</div>'; return; }
+  list.innerHTML = filtered.map(item => {
+    const st = getStatus(item.expiry);
+    const days = daysUntil(item.expiry);
+    const isLow = item.minQty > 0 && item.qty < item.minQty;
+    const badgeClass = st==='expired'?'badge-exp':st==='warning'?'badge-warn':isLow?'badge-low':'badge-ok';
+    const badgeText = st==='expired'?'פג תוקף':st==='warning'?'עומד לפוג':isLow?'מלאי נמוך':'תקין';
+    const cls = 'item' + (st==='expired'?' expired':st==='warning'?' warning':isLow?' low':'');
+    const meta = [];
+    if (item.unit) meta.push(item.unit);
+    if (item.expiry) {
+      const ds = days<0?` (לפני ${Math.abs(days)} ימים)`:days===0?' (היום!)':`(${days} ימים)`;
+      meta.push(`תפוגה: ${formatDate(item.expiry)} ${ds}`);
+    }
+    if (item.minQty>0) meta.push(`מינימום: ${item.minQty}`);
+    return `<div class="${cls}">
+      <div class="item-emoji">${item.emoji}</div>
+      <div class="item-info">
+        <div class="item-name">${item.name}</div>
+        <div class="item-meta">${meta.join(' · ')}</div>
+      </div>
+      <span class="item-badge ${badgeClass}">${badgeText}</span>
+      <div class="qty-controls">
+        <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+        <span class="qty-num">${item.qty}</span>
+        <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderAlerts() {
+  const expired = items.filter(i => getStatus(i.expiry)==='expired');
+  const warning = items.filter(i => getStatus(i.expiry)==='warning');
+  const box1 = document.getElementById('alert-exp');
+  const box2 = document.getElementById('alert-warn');
+  box1.style.display = expired.length ? 'block' : 'none';
+  box2.style.display = warning.length ? 'block' : 'none';
+  document.getElementById('list-exp').innerHTML = expired.map(i => {
+    const d = daysUntil(i.expiry);
+    return `<div class="alert-item">• ${i.name} — פג לפני ${Math.abs(d)} ימים</div>`;
+  }).join('');
+  document.getElementById('list-warn').innerHTML = warning.map(i => {
+    const d = daysUntil(i.expiry);
+    return `<div class="alert-item">• ${i.name} — ${d===0?'היום!':'בעוד '+d+' ימים'}</div>`;
+  }).join('');
+}
+
+function renderShopping() {
+  const lowItems = items.filter(i => i.minQty > 0 && i.qty < i.minQty);
+  const shopBox = document.getElementById('alert-shop');
+  shopBox.style.display = lowItems.length ? 'block' : 'none';
+  document.getElementById('list-shop').innerHTML = lowItems.map(i =>
+    `<div class="alert-item">• ${i.name} — יש ${i.qty}, צריך ${i.minQty}</div>`
+  ).join('');
+
+  const list = document.getElementById('shop-list');
+  const expired = items.filter(i => getStatus(i.expiry)==='expired');
+  const all = [...lowItems, ...expired.filter(i => !lowItems.find(l=>l.id===i.id))];
+
+  if (!all.length) {
+    list.innerHTML = '<div class="empty">המלאי מלא! אין מה לקנות 🎉</div>';
+    return;
+  }
+  list.innerHTML = all.map(item => {
+    const need = item.minQty > 0 ? item.minQty - item.qty : 1;
+    const checked = shopChecked[item.id];
+    return `<div class="shop-item ${checked?'done':''}">
+      <div class="shop-check ${checked?'checked':''}" onclick="toggleCheck(${item.id})">
+        ${checked?'✓':''}
+      </div>
+      <div class="shop-name">${item.emoji} ${item.name}</div>
+      <div class="shop-qty">${need > 0 ? need+' '+item.unit : item.unit}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderStats() {
+  document.getElementById('s-total').textContent = items.length;
+  document.getElementById('s-warn').textContent = items.filter(i=>getStatus(i.expiry)==='warning').length;
+  document.getElementById('s-exp').textContent = items.filter(i=>getStatus(i.expiry)==='expired').length;
+}
+
+function renderAll() { renderStats(); renderAlerts(); renderItems(); }
+
+function changeQty(id, delta) {
+  const item = items.find(i=>i.id===id);
+  if (item) { item.qty = Math.max(0, item.qty+delta); renderAll(); }
+}
+
+function toggleCheck(id) {
+  shopChecked[id] = !shopChecked[id];
+  renderShopping();
+}
+
+function addItem() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) return;
+  items.push({
+    id: Date.now(),
+    name,
+    qty: parseFloat(document.getElementById('f-qty').value)||1,
+    unit: document.getElementById('f-unit').value.trim()||'יחידה',
+    expiry: document.getElementById('f-expiry').value,
+    minQty: parseFloat(document.getElementById('f-minqty').value)||0,
+    emoji: getEmoji(name)
+  });
+  ['f-name','f-unit','f-expiry'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('f-qty').value='1';
+  document.getElementById('f-minqty').value='1';
+  renderAll();
+  showToast(`✓ ${name} נוסף`);
+}
+
+async function sendTelegram(msg) {
+  const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+  await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({chat_id: CHAT_ID, text: msg, parse_mode: 'HTML'})
+  });
+}
+
+async function sendTelegramAlert() {
+  const expired = items.filter(i=>getStatus(i.expiry)==='expired');
+  const warning = items.filter(i=>getStatus(i.expiry)==='warning');
+  const low = items.filter(i=>i.minQty>0&&i.qty<i.minQty);
+
+  if (!expired.length && !warning.length && !low.length) {
+    showToast('הכל תקין! אין התראות לשלוח');
+    return;
+  }
+
+  let msg = '🏠 <b>עדכון מלאי מטבח</b>\n\n';
+  if (expired.length) {
+    msg += '🚨 <b>פג תוקף:</b>\n';
+    expired.forEach(i => { const d=daysUntil(i.expiry); msg+=`• ${i.name} (לפני ${Math.abs(d)} ימים)\n`; });
+    msg += '\n';
+  }
+  if (warning.length) {
+    msg += '⚠️ <b>עומד לפוג:</b>\n';
+    warning.forEach(i => { const d=daysUntil(i.expiry); msg+=`• ${i.name} (${d===0?'היום!':'בעוד '+d+' ימים'})\n`; });
+    msg += '\n';
+  }
+  if (low.length) {
+    msg += '🛒 <b>מלאי נמוך:</b>\n';
+    low.forEach(i => { const need = i.minQty - i.qty; msg+=`• ${i.name} — קני ${need} ${i.unit}\n`; });
+  }
+
+  try {
+    await sendTelegram(msg);
+    showToast('✓ התראה נשלחה לטלגרם');
+  } catch(e) {
+    showToast('שגיאה בשליחה לטלגרם');
+  }
+}
+
+async function sendShoppingList() {
+  const low = items.filter(i=>i.minQty>0&&i.qty<i.minQty&&!shopChecked[i.id]);
+  const expired = items.filter(i=>getStatus(i.expiry)==='expired'&&!shopChecked[i.id]);
+  const all = [...low, ...expired.filter(i=>!low.find(l=>l.id===i.id))];
+
+  if (!all.length) { showToast('אין פריטים לשלוח'); return; }
+
+  let msg = '🛒 <b>רשימת קניות</b>\n\n';
+  all.forEach(i => {
+    const need = i.minQty>0 ? i.minQty-i.qty : 1;
+    msg += `• ${i.emoji} ${i.name}`;
+    if (need>0) msg += ` — ${need} ${i.unit}`;
+    msg += '\n';
+  });
+
+  try {
+    await sendTelegram(msg);
+    showToast('✓ רשימת קניות נשלחה לטלגרם');
+  } catch(e) {
+    showToast('שגיאה בשליחה');
+  }
+}
+
+function setStatus(msg) { document.getElementById('status').textContent = msg; }
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+renderAll();
+</script>
+</body>
+</html>
