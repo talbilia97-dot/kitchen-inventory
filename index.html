@@ -117,6 +117,7 @@
   <div class="tabs">
     <div class="tab active" onclick="switchTab('inventory')">מלאי</div>
     <div class="tab" onclick="switchTab('shopping')">רשימת קניות</div>
+    <div class="tab" onclick="switchTab('settings')">⚙️ הגדרות</div>
   </div>
 
   <div id="panel-inventory" class="panel active">
@@ -164,17 +165,41 @@
     <div class="shop-list" id="shop-list"></div>
   </div>
 
-  <div class="status-bar" id="status">לחצי "סנכרן" לטעינת הנתונים מ-Google Sheets</div>
+  <div id="panel-settings" class="panel">
+    <div class="add-section">
+      <div class="add-title">⚙️ הגדרות אישיות</div>
+      <p style="font-size:13px;color:var(--text-muted);margin-bottom:12px">הכניסי את הפרטים שלך — הם נשמרים רק במכשיר שלך</p>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:4px">מזהה Google Sheet (Spreadsheet ID)</div>
+          <input id="s-sheet-id" type="text" placeholder="1N5Ez..." />
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:4px">Google API Key</div>
+          <input id="s-api-key" type="text" placeholder="AIzaSy..." />
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:4px">Telegram Bot Token</div>
+          <input id="s-bot-token" type="text" placeholder="123456:ABC..." />
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:500;margin-bottom:4px">Telegram Chat ID</div>
+          <input id="s-chat-id" type="text" placeholder="1558300817" />
+        </div>
+        <button class="add-btn" onclick="saveSettings()">💾 שמור הגדרות</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const SHEET_ID = '1N5EzOBkYNZ8uMzFXHVkMTCooHeesGtlMqKwguixexQo';
-const API_KEY = 'AIzaSyCbTGobtkFdw-5zqsXt00URdt1CdsMGjUY';
+let SHEET_ID = localStorage.getItem('sheet_id') || '1N5EzOBkYNZ8uMzFXHVkMTCooHeesGtlMqKwguixexQo';
+let API_KEY = localStorage.getItem('api_key') || 'AIzaSyCbTGobtkFdw-5zqsXt00URdt1CdsMGjUY';
 const SHEET_NAME = 'מלאי  (Inventory)';
-const BOT_TOKEN = '8893612977:AAFv86-nDhoSTdqwdwnMyVW4TKNoHChvWQc';
-const CHAT_ID = '1558300817';
+let BOT_TOKEN = localStorage.getItem('bot_token') || '8893612977:AAFv86-nDhoSTdqwdwnMyVW4TKNoHChvWQc';
+let CHAT_ID = localStorage.getItem('chat_id') || '1558300817';
 
 const EMOJIS = {'חלב':'🥛','יוגורט':'🫙','לחם':'🍞','ביצים':'🥚','גבינה':'🧀','בשר':'🥩','עוף':'🍗','דג':'🐟','ירק':'🥦','פרי':'🍎','גזר':'🥕','עגבניה':'🍅','מלפפון':'🥒','תפוח':'🍎','בצל':'🧅','שום':'🧄','חמאה':'🧈','שמן':'🫙','קפה':'☕','תה':'🍵','אורז':'🍚','פסטה':'🍝'};
 const DEF_EMOJIS = ['🥫','🧂','📦','🥡'];
@@ -216,10 +241,12 @@ function parseExpiry(val) {
 }
 
 function switchTab(tab) {
-  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='inventory')||(i===1&&tab==='shopping')));
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', (i===0&&tab==='inventory')||(i===1&&tab==='shopping')||(i===2&&tab==='settings')));
   document.getElementById('panel-inventory').classList.toggle('active', tab==='inventory');
   document.getElementById('panel-shopping').classList.toggle('active', tab==='shopping');
+  document.getElementById('panel-settings').classList.toggle('active', tab==='settings');
   if (tab==='shopping') renderShopping();
+  if (tab==='settings') loadSettingsForm();
 }
 
 async function loadFromSheets() {
@@ -342,9 +369,17 @@ function changeQty(id, delta) {
   if (item) { item.qty = Math.max(0, item.qty+delta); renderAll(); }
 }
 
-function toggleCheck(id) {
+async function toggleCheck(id) {
   shopChecked[id] = !shopChecked[id];
   renderShopping();
+  if (shopChecked[id]) {
+    const item = items.find(i=>i.id===id);
+    if (item) {
+      const need = item.minQty > item.qty ? item.minQty - item.qty : 1;
+      await sendTelegram(`הוסף ${item.name}`);
+      showToast(`✓ ${item.name} נשלח לעדכון מלאי`);
+    }
+  }
 }
 
 function addItem() {
@@ -432,9 +467,30 @@ async function sendShoppingList() {
   }
 }
 
+function loadSettingsForm() {
+  document.getElementById('s-sheet-id').value = localStorage.getItem('sheet_id') || '';
+  document.getElementById('s-api-key').value = localStorage.getItem('api_key') || '';
+  document.getElementById('s-bot-token').value = localStorage.getItem('bot_token') || '';
+  document.getElementById('s-chat-id').value = localStorage.getItem('chat_id') || '';
+}
+
+function saveSettings() {
+  const sheetId = document.getElementById('s-sheet-id').value.trim();
+  const apiKey = document.getElementById('s-api-key').value.trim();
+  const botToken = document.getElementById('s-bot-token').value.trim();
+  const chatId = document.getElementById('s-chat-id').value.trim();
+  if (sheetId) { localStorage.setItem('sheet_id', sheetId); SHEET_ID = sheetId; }
+  if (apiKey) { localStorage.setItem('api_key', apiKey); API_KEY = apiKey; }
+  if (botToken) { localStorage.setItem('bot_token', botToken); BOT_TOKEN = botToken; }
+  if (chatId) { localStorage.setItem('chat_id', chatId); CHAT_ID = chatId; }
+  showToast('✓ ההגדרות נשמרו!');
+  switchTab('inventory');
+}
+
+
+
 function setStatus(msg) { document.getElementById('status').textContent = msg; }
 
-function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
