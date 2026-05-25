@@ -359,20 +359,9 @@ function changeQty(id, delta) {
   if (item) { item.qty = Math.max(0, item.qty+delta); renderAll(); }
 }
 
-async function toggleCheck(id) {
+function toggleCheck(id) {
   shopChecked[id] = !shopChecked[id];
   renderShopping();
-  if (shopChecked[id]) {
-    const item = items.find(i=>i.id===id);
-    if (item) {
-      try {
-        await sendTelegram('הוסף '+item.name);
-        showToast('✓ '+item.name+' נשלח לעדכון מלאי');
-      } catch(e) {
-        showToast('שגיאה בשליחה לטלגרם');
-      }
-    }
-  }
 }
 
 function addItem() {
